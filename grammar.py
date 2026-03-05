@@ -46,3 +46,44 @@ class Grammar:
                     transitions.setdefault((lhs, rhs[0]), set()).add(rhs[1])
 
         return FiniteAutomaton(states, alphabet, transitions, start_state, accept_states)
+
+    def classify_chomsky(self):
+        """Classify the grammar based on the Chomsky hierarchy.
+        Returns one of: 'Type 3 (Regular)', 'Type 2 (Context-Free)',
+        'Type 1 (Context-Sensitive)', 'Type 0 (Unrestricted)'.
+        """
+        is_regular = True
+        is_context_free = True
+        is_context_sensitive = True
+
+        for lhs, rhs_list in self.productions.items():
+            # For Type 2 and Type 3, the left-hand side must be a single non-terminal
+            if len(lhs) != 1 or lhs not in self.vn:
+                is_context_free = False
+                is_regular = False
+
+            for rhs in rhs_list:
+                # Check context-sensitive: |lhs| <= |rhs| (no shrinking rules)
+                if len(rhs) < len(lhs):
+                    is_context_sensitive = False
+
+                # Check regular grammar (right-linear):
+                # rhs is either a single terminal, or a terminal followed by a non-terminal
+                if is_regular:
+                    if len(rhs) == 1:
+                        if rhs not in self.vt:
+                            is_regular = False
+                    elif len(rhs) == 2:
+                        if rhs[0] not in self.vt or rhs[1] not in self.vn:
+                            is_regular = False
+                    else:
+                        is_regular = False
+
+        if is_regular:
+            return "Type 3 (Regular)"
+        elif is_context_free:
+            return "Type 2 (Context-Free)"
+        elif is_context_sensitive:
+            return "Type 1 (Context-Sensitive)"
+        else:
+            return "Type 0 (Unrestricted)"
