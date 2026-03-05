@@ -33,22 +33,17 @@ class FiniteAutomaton:
         """Convert the finite automaton to an equivalent regular grammar."""
         from grammar import Grammar
 
-        vn = set()
-        for s in self.states:
-            if s not in self.accept_states:
-                vn.add(s)
-
+        vn = set(self.states)
         vt = set(self.alphabet)
         productions = {}
 
         for (state, symbol), targets in self.transitions.items():
             for target in targets:
+                # Always add A -> aB
+                productions.setdefault(state, []).append(symbol + target)
+                # If target is an accept state, also add A -> a
                 if target in self.accept_states:
-                    # Transition to accept state => production A -> a
                     productions.setdefault(state, []).append(symbol)
-                else:
-                    # Transition to another state => production A -> aB
-                    productions.setdefault(state, []).append(symbol + target)
 
         return Grammar(vn, vt, productions, self.start_state)
 

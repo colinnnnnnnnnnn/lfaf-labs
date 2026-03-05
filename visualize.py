@@ -1,5 +1,4 @@
 from graphviz import Digraph
-from grammar import Grammar
 
 
 def draw_automaton(fa, title, filename):
@@ -31,28 +30,3 @@ def draw_automaton(fa, title, filename):
 
     dot.render(filename, format="png", cleanup=True)
     print(f"Saved {filename}.png")
-
-
-def main():
-    # Build the same grammar / FA as in main.py (Variant 21)
-    vn = {"S", "B", "C", "D"}
-    vt = {"a", "b", "c"}
-    productions = {
-        "S": ["aB"],
-        "B": ["bS", "aC", "b"],
-        "C": ["bD"],
-        "D": ["a", "bC", "cS"],
-    }
-    grammar = Grammar(vn, vt, productions, "S")
-    nfa = grammar.to_finite_automaton()
-
-    # Draw NFA
-    draw_automaton(nfa, "NFA", "nfa_graph")
-
-    # Convert to DFA and draw
-    dfa = nfa.to_dfa()
-    draw_automaton(dfa, "DFA", "dfa_graph")
-
-
-if __name__ == "__main__":
-    main()
