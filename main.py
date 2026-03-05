@@ -128,9 +128,9 @@ def main():
 
     # 2d. Visualize the finite automaton graphically
     print(f"\n2d. Graphical representation:")
-    draw_automaton(fa, "NFA (Variant 21)", "nfa_graph")
+    draw_automaton(fa, "NFA", "nfa_graph")
     if not det:
-        draw_automaton(dfa, "DFA (Variant 21)", "dfa_graph")
+        draw_automaton(dfa, "DFA", "dfa_graph")
 
 
 if __name__ == "__main__":
