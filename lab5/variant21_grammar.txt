@@ -1,0 +1,16 @@
+# Example grammar file for Lab 5
+VN=S,A,B,C,D
+VT=a,b,d
+S=S
+P:
+S->dB
+S->AC
+A->d
+A->dS
+A->aBdB
+B->a
+B->aA
+B->AC
+D->ab
+C->bC
+C->ε
